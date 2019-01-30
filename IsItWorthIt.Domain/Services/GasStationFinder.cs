@@ -1,11 +1,10 @@
-
-
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using IsItWorthIt.Domain.Contracts;
 using IsItWorthIt.Domain.Models;
+using IsItWorthIt.Domain.Utilities;
 
 namespace IsItWorthIt.Domain.Services
 {
@@ -20,12 +19,12 @@ namespace IsItWorthIt.Domain.Services
 
         public async Task<GasDataResponse> Find(GasDataRequest request)
         {
-            _http.BaseAddress = new Uri("http://devapi.mygasfeed.com/");
-            _http.DefaultRequestHeaders.Accept.Clear();
-            _http.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            _http.BaseAddress = new Uri("http://devapi.mygasfeed.com");
+            var url = $"/stations/radius/{request.Latitude}/{request.Longitude}/{request.Distance}/{request.FuelType}/price/rfej9napna.json";
             
-            var response = await _http.GetAsync($"stations/radius/{request.Latitude}/{request.Longitude}/{request.Distance}/{request.FuelType}/price/rfej9napna.json").ConfigureAwait(false);
-            return new GasDataResponse();
+            var response = await _http.GetAsync(url).ConfigureAwait(false);
+            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            return content.FromJson<GasDataResponse>();
         }
     }
 }

@@ -5,7 +5,7 @@ namespace IsItWorthIt.Domain.Utilities
 {
     public static class Extensions
     {
-        public static GasDataResponse FromJson(this string json) => JsonConvert.DeserializeObject<GasDataResponse>(json, Converter.Settings);
-        public static string ToJson(this GasDataResponse self) => JsonConvert.SerializeObject(self, Converter.Settings);
+        public static T FromJson<T>(this string json) => JsonConvert.DeserializeObject<T>(json, Converter.Settings);
+        public static string ToJson<T>(this T self) => JsonConvert.SerializeObject(self, Converter.Settings);
     }
 }

@@ -10,7 +10,7 @@ using NUnit.Framework;
 
 namespace IsItWorthIt.Tests.Services
 {
-    [TestFixture, Category("Unit")]
+    [TestFixture]
     public class GasStationFinderTests
     {
         private Mock<FakeHttpMessageHandler> _fakeHttpMessageHandler;
@@ -30,7 +30,7 @@ namespace IsItWorthIt.Tests.Services
             _http.Dispose();
         }
 
-        [Test]
+        [Test, Category("Unit")]
         public async Task GasStationFinder_Find_MakesHttpRequest()
         {
             // Arrange
@@ -49,7 +49,7 @@ namespace IsItWorthIt.Tests.Services
             _fakeHttpMessageHandler.Verify(f => f.Send(It.IsAny<HttpRequestMessage>()), Times.Once);
         }
 
-        [Test]
+        [Test, Category("Unit")]
         public async Task GasStationFinder_Find_ReturnsGasDataResponse()
         {
             // Arrange
@@ -72,10 +72,11 @@ namespace IsItWorthIt.Tests.Services
         public async Task GasStationFinder_Find_CallsMyGasFeed()
         {
             // Arrange
+            var gasDataRequest = GasDataHelper.GetRequest();
             var finder = new GasStationFinder(new HttpClient());
 
             // Act
-            var result = await finder.Find(new GasDataRequest()).ConfigureAwait(false);
+            var result = await finder.Find(gasDataRequest).ConfigureAwait(false);
 
             // Assert
             Assert.IsInstanceOf(typeof(GasDataResponse), result);

@@ -6,6 +6,17 @@ namespace IsItWorthIt.Tests.Utilities
 {
     public static class GasDataHelper
     {
+        public static GasDataRequest GetRequest()
+        {
+            return new GasDataRequest
+            {
+                Latitude = "34.263673",
+                Longitude = "-88.73210",
+                Distance = "10",
+                FuelType = "reg"
+            };
+        }
+
         public static GasDataResponse OK_EmptyStations()
         {
             return new GasDataResponse
