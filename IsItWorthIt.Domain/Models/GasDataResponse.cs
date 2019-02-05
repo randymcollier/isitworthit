@@ -11,9 +11,6 @@ namespace IsItWorthIt.Domain.Models
         [JsonProperty("status")]
         public Status Status { get; set; }
 
-        [JsonProperty("geoLocation")]
-        public GeoLocation GeoLocation { get; set; }
-
         [JsonProperty("stations")]
         public List<Station> Stations { get; set; }
     }
