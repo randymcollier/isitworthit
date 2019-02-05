@@ -19,8 +19,8 @@ namespace IsItWorthIt.Domain.Services
 
         public async Task<GasDataResponse> Find(GasDataRequest request)
         {
-            _http.BaseAddress = new Uri("http://devapi.mygasfeed.com");
-            var url = $"/stations/radius/{request.Latitude}/{request.Longitude}/{request.Distance}/{request.FuelType}/price/rfej9napna.json";
+            _http.BaseAddress = new Uri("http://api.mygasfeed.com");
+            var url = $"/stations/radius/{request.Latitude}/{request.Longitude}/{request.Distance}/{request.FuelType}/price/rzkel0lgcd.json";
             
             var response = await _http.GetAsync(url).ConfigureAwait(false);
             var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
