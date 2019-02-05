@@ -1,0 +1,57 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+name: $(date:yyyyMMdd)$(rev:.r)
+
+trigger:
+  - master
+  - development
+
+pr:
+  - master
+  - development
+
+pool:
+  vmImage: 'Ubuntu-16.04'
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+- task: DotNetCoreInstaller@0
+  displayName: 'Install DotNet Core 2.2.103'
+  inputs:
+    packageType: 'sdk'
+    version: '2.2.103'
+
+- script: dotnet restore
+  displayName: 'Restore'
+
+- script: dotnet build --configuration $(buildConfiguration) --no-restore
+  displayName: 'Build'
+
+- script: dotnet test IsItWorthIt.Tests/IsItWorthIt.Tests.csproj --configuration $(buildConfiguration) --filter Category=Unit --logger trx --no-build
+  displayName: 'Unit Tests'
+
+- script: dotnet test IsItWorthIt.Tests/IsItWorthIt.Tests.csproj --configuration $(buildConfiguration) --filter Category=Integration --logger trx --no-build
+  displayName: 'Integration Tests'
+
+- task: PublishTestResults@2
+  displayName: 'Publish Test Results'
+  condition: succeededOrFailed()
+  inputs:
+    testRunner: VSTest
+    testResultsFiles: '**/*.trx'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Generate Artifacts'
+  inputs:
+    command: publish
+    publishWebProjects: true
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory) --no-build'
+    zipAfterPublish: true
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifacts'
