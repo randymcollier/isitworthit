@@ -1,4 +1,3 @@
-using System.Net.Http;
 using NUnit.Framework;
 
 namespace IsItWorthIt.Tests.Api
@@ -7,19 +6,20 @@ namespace IsItWorthIt.Tests.Api
     public class ApiBaseTest
     {
         private ApiWebApplicationFactory _factory { get; set; }
-        protected HttpClient _httpClient { get; set; }
+        protected ApiTestClient _apiClient { get; set; }
 
         [OneTimeSetUp]
         public void Setup()
         {
             _factory = new ApiWebApplicationFactory();
-            _httpClient = _factory.CreateClient();
+            var http = _factory.CreateClient();
+            _apiClient = new ApiTestClient(http);
         }
 
         [OneTimeTearDown]
         public void Cleanup()
         {
-            _httpClient?.Dispose();
+            _apiClient?.Dispose();
             _factory?.Dispose();
         }
     }
