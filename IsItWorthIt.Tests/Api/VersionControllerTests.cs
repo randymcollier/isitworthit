@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using IsItWorthIt.Domain.Models;
 using NUnit.Framework;
 
 namespace IsItWorthIt.Tests.Api
@@ -9,21 +10,20 @@ namespace IsItWorthIt.Tests.Api
         public async Task VersionController_Get_Returns200()
         {
             // Act
-            var response = await _httpClient.GetAsync("/api/version").ConfigureAwait(false);
+            var response = await _apiClient.GetAsync<Versioning>("/api/version").ConfigureAwait(false);
 
             // Assert
-            Assert.True(response.IsSuccessStatusCode);
+            Assert.True(response?.ResponseMessage?.IsSuccessStatusCode);
         }
 
         [Test]
         public async Task VersionController_Get_ReturnsString()
         {
             // Act
-            var response = await _httpClient.GetAsync("/api/version").ConfigureAwait(false);
-            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var response = await _apiClient.GetAsync<Versioning>("/api/version").ConfigureAwait(false);
 
             // Assert
-            Assert.NotNull(content);
+            Assert.NotNull(response?.Data);
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using IsItWorthIt.Domain.Contracts;
+using IsItWorthIt.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IsItWorthIt.Api.Controllers
@@ -17,10 +18,10 @@ namespace IsItWorthIt.Api.Controllers
 
         // GET api/version
         [HttpGet]
-        public ActionResult Get()
+        public IActionResult Get()
         {
             var result = _versioner.GetVersion();
-            return Ok(result);
+            return new OkObjectResult(result);
         }
     }
 }
